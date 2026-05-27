@@ -2,19 +2,27 @@
   "name": "@onereason/svenska-dagar-mcp",
   "version": "0.1.0",
   "description": "MCP server for the Swedish public holiday and calendar API (sholiday.faboul.se)",
-  "keywords": ["mcp", "swedish", "calendar", "holidays", "namnsdagar"],
+  "keywords": [
+    "mcp",
+    "swedish",
+    "calendar",
+    "holidays",
+    "namnsdagar"
+  ],
   "license": "MIT",
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "bin": {
-    "svenska-dagar-mcp": "./dist/server.js"
+    "svenska-dagar-mcp": "dist/server.js"
   },
   "engines": {
     "node": ">=18"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/suhajdab/svenska-dagar-mcp.git"
+    "url": "git+https://github.com/suhajdab/svenska-dagar-mcp.git"
   },
   "publishConfig": {
     "access": "public"
