@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la \"/Users/balazs.suhajda/Library/Mobile Documents/com~apple~CloudDocs/Projects/\")",
+      "WebFetch(domain:api.dryg.net)",
+      "Read(//Users/balazs.suhajda/.claude/**)"
+    ]
+  }
+}
