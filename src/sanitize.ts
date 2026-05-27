@@ -66,7 +66,13 @@ function sanitizeDay(raw: DayRecord): Record<string, unknown> {
 }
 
 export function sanitizeCalendarResponse(raw: unknown): unknown {
-  if (typeof raw !== "object" || raw === null) return raw;
+  // If the upstream returns a non-object (string, number, array at root level),
+  // do NOT pass it through — return an empty safe structure instead.
+  // A hijacked API could otherwise inject content via a raw string response
+  // that would bypass all field-level sanitization.
+  if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
+    return { version: "", startdatum: "", slutdatum: "", dagar: [] };
+  }
   const obj = raw as DayRecord;
   return {
     // Metadata: keep only the fields an LLM consumer actually needs.
