@@ -12,6 +12,10 @@
   "engines": {
     "node": ">=18"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/suhajdab/svenska-dagar-mcp.git"
+  },
   "publishConfig": {
     "access": "public"
   },
