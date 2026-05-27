@@ -6,10 +6,23 @@ import {
   ListToolsRequestSchema,
 } from "@modelcontextprotocol/sdk/types.js";
 import { validateYear, validateMonth, validateDay } from "./validate.js";
+import { sanitizeCalendarResponse } from "./sanitize.js";
 
 // Hardcoded HTTPS base — callers cannot override the scheme or host.
 const BASE_URL = "https://sholiday.faboul.se/dagar/v2.1" as const;
 const TIMEOUT_MS = 10_000;
+
+// Shared input schema fragment added to every tool.
+const SANITIZE_SCHEMA = {
+  sanitize: {
+    type: "boolean",
+    description:
+      "When true (default), API response values are validated against known " +
+      "formats, unknown fields are dropped, and strings are scanned for prompt " +
+      "injection patterns before being returned. Set to false only if you need " +
+      "the raw upstream response.",
+  },
+} as const;
 
 // ---------------------------------------------------------------------------
 // HTTP helper — path is always built from validated integers only.
@@ -30,6 +43,10 @@ async function fetchCalendar(path: string): Promise<unknown> {
   } finally {
     clearTimeout(timer);
   }
+}
+
+function applyPolicy(data: unknown, sanitize: boolean): string {
+  return JSON.stringify(sanitize ? sanitizeCalendarResponse(data) : data, null, 0);
 }
 
 // ---------------------------------------------------------------------------
@@ -57,6 +74,7 @@ server.setRequestHandler(ListToolsRequestSchema, () => ({
           year:  { type: "integer", description: "Year (1753–2100)" },
           month: { type: "integer", description: "Month (1–12)" },
           day:   { type: "integer", description: "Day of month (1–31)" },
+          ...SANITIZE_SCHEMA,
         },
         required: ["year", "month", "day"],
         additionalProperties: false,
@@ -72,6 +90,7 @@ server.setRequestHandler(ListToolsRequestSchema, () => ({
         properties: {
           year:  { type: "integer", description: "Year (1753–2100)" },
           month: { type: "integer", description: "Month (1–12)" },
+          ...SANITIZE_SCHEMA,
         },
         required: ["year", "month"],
         additionalProperties: false,
@@ -86,6 +105,7 @@ server.setRequestHandler(ListToolsRequestSchema, () => ({
         type: "object",
         properties: {
           year: { type: "integer", description: "Year (1753–2100)" },
+          ...SANITIZE_SCHEMA,
         },
         required: ["year"],
         additionalProperties: false,
@@ -98,6 +118,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
   const { name, arguments: args = {} } = request.params;
 
   const { year, month, day } = args as Record<string, unknown>;
+  const sanitize = (args as Record<string, unknown>)["sanitize"] !== false;
 
   try {
     let data: unknown;
@@ -126,7 +147,7 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
     }
 
     return {
-      content: [{ type: "text", text: JSON.stringify(data, null, 0) }],
+      content: [{ type: "text", text: applyPolicy(data, sanitize) }],
     };
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
