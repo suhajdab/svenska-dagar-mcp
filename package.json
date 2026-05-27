@@ -12,7 +12,8 @@
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run build",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "test": "node --experimental-strip-types --test test/unit.test.ts test/api.test.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.29.0"
