@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-const BASE = "https://api.dryg.net/dagar/v2.1";
+const BASE = "https://sholiday.faboul.se/dagar/v2.1";
 
 type DayRecord = Record<string, unknown>;
 

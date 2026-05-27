@@ -8,7 +8,7 @@ import {
 import { validateYear, validateMonth, validateDay } from "./validate.js";
 
 // Hardcoded HTTPS base — callers cannot override the scheme or host.
-const BASE_URL = "https://api.dryg.net/dagar/v2.1" as const;
+const BASE_URL = "https://sholiday.faboul.se/dagar/v2.1" as const;
 const TIMEOUT_MS = 10_000;
 
 // ---------------------------------------------------------------------------
