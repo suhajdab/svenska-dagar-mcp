@@ -19,6 +19,14 @@ Add to your Claude Desktop config (`~/Library/Application Support/Claude/claude_
 
 Restart Claude Desktop. The three tools below are then available in every conversation.
 
+For Codex, add the server to your Codex config (`~/.codex/config.toml`):
+
+```toml
+[mcp_servers.svenska-dagar]
+command = "npx"
+args = ["-y", "@onereason/svenska-dagar-mcp"]
+```
+
 ## Tools
 
 ### `get_swedish_day`
