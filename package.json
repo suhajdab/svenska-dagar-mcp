@@ -28,7 +28,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && chmod 755 dist/server.js",
     "prepublishOnly": "npm run build",
     "start": "node dist/server.js",
     "test": "node --experimental-strip-types --test test/unit.test.ts test/sanitize.test.ts test/api.test.ts"
