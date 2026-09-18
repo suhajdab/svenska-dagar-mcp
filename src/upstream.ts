@@ -1,7 +1,7 @@
 const BASE_URL = "https://sholiday.faboul.se/dagar/v2.1" as const;
 const TIMEOUT_MS = 10_000;
 
-export const MAX_RESPONSE_BYTES = 1_000_000;
+export const MAX_RESPONSE_BYTES = 256 * 1024;
 
 export async function readJsonResponse(response: Response): Promise<unknown> {
   if (!response.ok) {
