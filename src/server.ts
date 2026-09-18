@@ -54,7 +54,7 @@ function applyPolicy(data: unknown, sanitize: boolean): string {
 // ---------------------------------------------------------------------------
 
 const server = new Server(
-  { name: "svenska-dagar", version: "0.1.0" },
+  { name: "svenska-dagar", version: "0.1.5" },
   { capabilities: { tools: {} } },
 );
 
