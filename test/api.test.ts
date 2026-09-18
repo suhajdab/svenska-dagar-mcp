@@ -1,5 +1,10 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import {
+  MAX_SERIALIZED_BYTES,
+  RESPONSE_DAY_LIMITS,
+  serializeCalendarResponse,
+} from "../src/sanitize.ts";
 import { fetchCalendar } from "../src/upstream.ts";
 
 const BASE = "https://sholiday.faboul.se/dagar/v2.1";
@@ -90,4 +95,9 @@ test("api: hardened upstream client accepts a full-year response", async () => {
   const body = await fetchCalendar("2026") as { dagar?: DayRecord[] };
   assert.ok(Array.isArray(body.dagar), "dagar array missing");
   assert.equal(body.dagar.length, 365);
+  const serialized = serializeCalendarResponse(
+    body,
+    RESPONSE_DAY_LIMITS.year,
+  );
+  assert.ok(Buffer.byteLength(serialized) <= MAX_SERIALIZED_BYTES);
 });

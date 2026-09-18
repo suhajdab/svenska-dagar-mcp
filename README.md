@@ -88,7 +88,7 @@ disabled through tool arguments:
 - **Enum coercion** — `"röd dag"` and `"arbetsfri dag"` are coerced to exactly `"Ja"` or `"Nej"`
 - **Hardcoded flags** — presence-only fields (`klämdagen`, `dag före arbetsfri helgdag`) are always written as `"Ja"` regardless of what the API sends
 - **Non-object responses** — if the upstream returns a string, array, or any non-object, an empty safe structure is returned instead of passing through raw content
-- **Bounded upstream reads** — non-JSON responses, redirects, and responses over 1 MB are rejected
+- **Bounded upstream data** — non-JSON responses, redirects, payloads over 256 KiB, oversized record lists, invalid day records, and sanitized output over 128 KiB are rejected
 
 ## Development
 
