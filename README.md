@@ -1,5 +1,7 @@
 # @onereason/svenska-dagar-mcp
 
+[![MCP Trust Score](https://mcptrustchecker.com/registry/onereason-svenska-dagar-mcp/badge.svg)](https://mcptrustchecker.com/registry/onereason-svenska-dagar-mcp)
+
 MCP server exposing the Swedish public holiday and calendar API ([sholiday.faboul.se](https://sholiday.faboul.se)) to Claude and other MCP clients.
 
 ## Installation
