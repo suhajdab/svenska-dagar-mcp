@@ -1,6 +1,6 @@
 {
   "name": "@onereason/svenska-dagar-mcp",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "description": "MCP server for the Swedish public holiday and calendar API (sholiday.faboul.se)",
   "keywords": [
     "mcp",
@@ -18,7 +18,7 @@
     "svenska-dagar-mcp": "dist/server.js"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "repository": {
     "type": "git",
@@ -32,13 +32,13 @@
     "build": "tsc && chmod 755 dist/server.js",
     "prepublishOnly": "npm run build",
     "start": "node dist/server.js",
-    "test": "node --experimental-strip-types --test test/unit.test.ts test/sanitize.test.ts test/api.test.ts"
+    "test": "node --experimental-strip-types --test test/unit.test.ts test/sanitize.test.ts test/security-boundary.test.ts test/api.test.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.30.0"
   },
   "devDependencies": {
-    "@types/node": "25.9.1",
+    "@types/node": "22.20.3",
     "typescript": "6.0.3"
   }
 }

@@ -38,7 +38,6 @@ Returns calendar data for a single date.
 | `year` | integer | Year (1753–2100) |
 | `month` | integer | Month (1–12) |
 | `day` | integer | Day of month (1–31) |
-| `sanitize` | boolean | See [Security](#security) — default `true` |
 
 ### `get_swedish_month`
 
@@ -48,7 +47,6 @@ Returns calendar data for every day in a month.
 |-----------|------|-------------|
 | `year` | integer | Year (1753–2100) |
 | `month` | integer | Month (1–12) |
-| `sanitize` | boolean | Default `true` |
 
 ### `get_swedish_year`
 
@@ -57,7 +55,6 @@ Returns calendar data for every day in a year (~365 records). Prefer `get_swedis
 | Parameter | Type | Description |
 |-----------|------|-------------|
 | `year` | integer | Year (1753–2100) |
-| `sanitize` | boolean | Default `true` |
 
 ## Response fields
 
@@ -80,7 +77,8 @@ Each day record contains:
 
 ## Security
 
-All responses are sanitized before reaching the LLM by default:
+All responses are sanitized before reaching the LLM. Sanitization cannot be
+disabled through tool arguments:
 
 - **Field allowlist** — unknown fields are dropped
 - **Injection scan** — string values are checked against known prompt-injection patterns (ChatML tokens, role prefixes, markdown headers, etc.) and replaced with `[redacted: suspicious content]` if matched
@@ -88,8 +86,7 @@ All responses are sanitized before reaching the LLM by default:
 - **Enum coercion** — `"röd dag"` and `"arbetsfri dag"` are coerced to exactly `"Ja"` or `"Nej"`
 - **Hardcoded flags** — presence-only fields (`klämdagen`, `dag före arbetsfri helgdag`) are always written as `"Ja"` regardless of what the API sends
 - **Non-object responses** — if the upstream returns a string, array, or any non-object, an empty safe structure is returned instead of passing through raw content
-
-Pass `sanitize: false` to receive the raw upstream response (useful for debugging).
+- **Bounded upstream reads** — non-JSON responses, redirects, and responses over 1 MB are rejected
 
 ## Development
 
@@ -99,8 +96,8 @@ npm run build      # compile TypeScript → dist/
 npm test           # run unit + integration tests (requires network for API tests)
 ```
 
-**Running the server** requires Node.js ≥ 18 (native `fetch`).  
-**Running the tests** requires Node.js ≥ 22.6 (`--experimental-strip-types`).
+- **Running the server** requires a supported Node.js release ≥ 22.
+- **Running the tests** requires Node.js ≥ 22.6 (`--experimental-strip-types`).
 
 ## License
 

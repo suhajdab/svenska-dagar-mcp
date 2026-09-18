@@ -86,3 +86,7 @@ export function sanitizeCalendarResponse(raw: unknown): unknown {
       : [],
   };
 }
+
+export function serializeCalendarResponse(raw: unknown): string {
+  return JSON.stringify(sanitizeCalendarResponse(raw), null, 0);
+}
