@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.2
+
+- Update `@modelcontextprotocol/sdk` to 1.32.2.
+- Update vulnerable transitive dependencies; npm audit reports no vulnerabilities.
+- Separate live API tests from required CI and add a manual live-test workflow.
+- Update the Node setup action and remove the discontinued trust-score badge.
+
 ## 0.2.1
 
 - Reduce the upstream response limit from 1 MB to 256 KiB.
