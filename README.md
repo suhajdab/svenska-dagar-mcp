@@ -93,8 +93,15 @@ disabled through tool arguments:
 ```bash
 npm install        # install dependencies
 npm run build      # compile TypeScript → dist/
-npm test           # run unit + integration tests (requires network for API tests)
+npm test           # run network-independent unit and security-boundary tests
+npm run test:api   # run live integration tests (requires access to the upstream API)
 ```
+
+Required CI runs the network-independent tests, build, dependency audit, and
+signature verification on Node.js 22 and 24. Live integration tests run separately
+through the manually triggered **Live API tests** workflow in GitHub Actions.
+Upstream outages or access restrictions still fail live tests, but do not block
+pull requests.
 
 - **Running the server** requires a supported Node.js release ≥ 22.
 - **Running the tests** requires Node.js ≥ 22.6 (`--experimental-strip-types`).
