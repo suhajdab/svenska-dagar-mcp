@@ -32,7 +32,8 @@
     "build": "tsc && chmod 755 dist/server.js",
     "prepublishOnly": "npm run build",
     "start": "node dist/server.js",
-    "test": "node --experimental-strip-types --test test/unit.test.ts test/sanitize.test.ts test/security-boundary.test.ts test/api.test.ts"
+    "test": "node --experimental-strip-types --test test/unit.test.ts test/sanitize.test.ts test/security-boundary.test.ts",
+    "test:api": "node --experimental-strip-types --test test/api.test.ts"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "1.32.2"
