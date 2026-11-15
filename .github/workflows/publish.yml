@@ -6,15 +6,15 @@ on:
       - "v*"
 
 jobs:
-  publish:
+  verify:
     runs-on: ubuntu-latest
     permissions:
-      id-token: write
       contents: read
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: "24"
@@ -29,5 +29,40 @@ jobs:
       - run: npm audit signatures
       - run: npm run build
       - run: npm test
-      - run: npm pack --dry-run
-      - run: npm publish --provenance
+      - name: Pack release tarball
+        run: |
+          tarball="$(npm pack --ignore-scripts --pack-destination "$RUNNER_TEMP")"
+          mv "$RUNNER_TEMP/$tarball" "$RUNNER_TEMP/release.tgz"
+      - name: Check the installed release
+        run: |
+          project="$(mktemp -d "$RUNNER_TEMP/npm-smoke.XXXXXX")"
+          (
+            cd "$project"
+            npm init --yes
+            npm install --omit=dev --ignore-scripts --no-audit --no-fund "$RUNNER_TEMP/release.tgz"
+            npm audit --omit=dev --audit-level=high
+          )
+          node test/package-smoke.mjs "$project"
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: npm-release
+          path: ${{ runner.temp }}/release.tgz
+          if-no-files-found: error
+          overwrite: true
+
+  publish:
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: npm-release
+          path: ${{ runner.temp }}
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "24"
+          registry-url: "https://registry.npmjs.org"
+      - run: npm publish --provenance "$RUNNER_TEMP/release.tgz"
